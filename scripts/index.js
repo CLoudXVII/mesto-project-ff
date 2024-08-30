@@ -3,12 +3,13 @@ const cardList = document.querySelector('.places__list');
 
 cardRemove = (evt) => evt.target.closest('.card').remove();
 
-function cardCreate (card) {
+function cardCreate (card, removalFunc) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   cardElement.querySelector('.card__image').src = card.link;
+  cardElement.querySelector('.card__image').alt = card.name;
   cardElement.querySelector('.card__title').textContent = card.name;
-  cardElement.querySelector('.card__delete-button').addEventListener('click', cardRemove);
+  cardElement.querySelector('.card__delete-button').addEventListener('click', removalFunc);
   return cardElement
 }
 
-initialCards.forEach(element => cardList.append(cardCreate(element)));
+initialCards.forEach(element => cardList.append(cardCreate(element, cardRemove)));

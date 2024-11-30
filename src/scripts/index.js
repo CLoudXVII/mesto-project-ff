@@ -4,7 +4,9 @@ import { initialCards } from "./cards";
 const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 
-cardRemove = (evt) => evt.target.closest('.card').remove();
+function cardRemove(evt) {
+  evt.target.closest('.card').remove();
+}
 
 function cardCreate (card, removalFunc) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);

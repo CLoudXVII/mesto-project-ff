@@ -26,17 +26,22 @@ function cardRemove(evt) {
   evt.target.closest('.card').remove();
 }
 
+function cardLike(evt) {
+  evt.target.classList.toggle('card__like-button_is-active');
+}
+
 // Функция добавление карточки с помощью template
-function cardCreate(card, removalFunc) {
+function cardCreate(card, removalFunc, likeFunc) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   cardElement.querySelector('.card__image').src = card.link;
   cardElement.querySelector('.card__image').alt = card.name;
   cardElement.querySelector('.card__title').textContent = card.name;
   cardElement.querySelector('.card__delete-button').addEventListener('click', removalFunc);
+  cardElement.querySelector('.card__like-button').addEventListener('click', likeFunc);
   return cardElement;
 }
 
-initialCards.forEach(element => cardList.append(cardCreate(element, cardRemove)));
+initialCards.forEach(element => cardList.append(cardCreate(element, cardRemove, cardLike)));
 
 // Универсальная функция открытия попапа
 function openPopup(popup) {

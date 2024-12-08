@@ -19,6 +19,10 @@ const addCardForm = addCardPopup.querySelector('.popup__form');
 const addCardFormName = addCardForm.querySelector('.popup__input_type_card-name');;
 const addCardFormLink = addCardForm.querySelector('.popup__input_type_url');
 
+const imagePopup = document.querySelector('.popup_type_image');
+const imagePopupName = imagePopup.querySelector('.popup__caption');
+const imagePopupWindow = imagePopup.querySelector('.popup__image');
+
 // Функция удаление карточки
 function handleCardRemove(evt) {
   evt.target.closest('.card').remove();
@@ -29,18 +33,25 @@ function handleCardLike(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }
 
+function handleImagePopup(evt) {
+  imagePopupName.textContent = evt.target.alt;
+  imagePopupWindow.src = evt.target.src;
+  openPopup(imagePopup);
+}
+
 // Функция добавление карточки с помощью template
-function createCard(card, removeCardFunction, likeCardFunction) {
+function createCard(card, removeCardFunction, likeCardFunction, imagePopupFunction) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   cardElement.querySelector('.card__image').src = card.link;
   cardElement.querySelector('.card__image').alt = card.name;
   cardElement.querySelector('.card__title').textContent = card.name;
   cardElement.querySelector('.card__delete-button').addEventListener('click', removeCardFunction);
   cardElement.querySelector('.card__like-button').addEventListener('click', likeCardFunction);
+  cardElement.querySelector('.card__image').addEventListener('click', imagePopupFunction);
   return cardElement;
 }
 
-initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike)));
+initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
 
 // Универсальная функция открытия попапа
 function openPopup(popup) {
@@ -86,7 +97,7 @@ function handleCardFormSubmit(evt) {
   const newCard = {};
   newCard.name = addCardFormName.value;
   newCard.link = addCardFormLink.value;
-  cardList.prepend(createCard(newCard, handleCardRemove));
+  cardList.prepend(createCard(newCard, handleCardRemove, handleCardLike, handleImagePopup));
   closePopup(addCardPopup);
 }
 

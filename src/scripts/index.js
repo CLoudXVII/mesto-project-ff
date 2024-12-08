@@ -28,6 +28,7 @@ const imagePopupWindow = imagePopup.querySelector('.popup__image');
 function handleImagePopup(evt) {
   imagePopupName.textContent = evt.target.alt;
   imagePopupWindow.src = evt.target.src;
+  imagePopupWindow.alt = evt.target.alt;
   openPopup(imagePopup);
 }
 
@@ -47,8 +48,7 @@ function handleCardFormSubmit(evt) {
   newCard.link = addCardFormLink.value;
   cardList.prepend(createCard(newCard, handleCardRemove, handleCardLike, handleImagePopup));
   closePopup(addCardPopup);
-  addCardFormName.value = "";
-  addCardFormLink.value = "";
+  addCardForm.reset();
 }
 
 // Обработчики для изменения профиля

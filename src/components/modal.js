@@ -8,9 +8,11 @@ function handlePopupClose(evt) {
 
 // Хендлер закрытия попапа по нажатию клавиши esc
 function handlePopupEscClose(evt) {
-  const openedPopup = document.querySelector('.popup_is-opened');
-  if (evt.key === 'Escape' && openedPopup) {
-    closePopup(openedPopup);
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_is-opened');
+    if (openedPopup) {
+      closePopup(openedPopup);
+    }
   }
 }
 

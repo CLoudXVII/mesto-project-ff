@@ -1,7 +1,8 @@
 import '../pages/index.css';
 import { initialCards } from './cards.js';
+import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
+import { openPopup, closePopup } from '../components/modal.js';
 
-const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 
 const profileName = document.querySelector('.profile__title');
@@ -23,64 +24,11 @@ const imagePopup = document.querySelector('.popup_type_image');
 const imagePopupName = imagePopup.querySelector('.popup__caption');
 const imagePopupWindow = imagePopup.querySelector('.popup__image');
 
-// Функция удаление карточки
-function handleCardRemove(evt) {
-  evt.target.closest('.card').remove();
-}
-
-// Функция лайка карточки
-function handleCardLike(evt) {
-  evt.target.classList.toggle('card__like-button_is-active');
-}
-
+// Хендлер увеличения изображения
 function handleImagePopup(evt) {
   imagePopupName.textContent = evt.target.alt;
   imagePopupWindow.src = evt.target.src;
   openPopup(imagePopup);
-}
-
-// Функция добавление карточки с помощью template
-function createCard(card, removeCardFunction, likeCardFunction, imagePopupFunction) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-  cardElement.querySelector('.card__image').src = card.link;
-  cardElement.querySelector('.card__image').alt = card.name;
-  cardElement.querySelector('.card__title').textContent = card.name;
-  cardElement.querySelector('.card__delete-button').addEventListener('click', removeCardFunction);
-  cardElement.querySelector('.card__like-button').addEventListener('click', likeCardFunction);
-  cardElement.querySelector('.card__image').addEventListener('click', imagePopupFunction);
-  return cardElement;
-}
-
-initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
-
-// Универсальная функция открытия попапа
-function openPopup(popup) {
-  popup.classList.add('popup_is-opened');
-  document.addEventListener('keydown', handlePopupEscClose);
-  popup.addEventListener('click', handlePopupClose);
-}
-
-// Универсальная функция закрытия попапа
-function closePopup(popup) {
-  popup.classList.remove('popup_is-opened');
-  document.removeEventListener('keydown', handlePopupEscClose);
-  popup.removeEventListener('click', handlePopupClose);
-}
-
-// Функция закрытия попапа по клику на оверлей или на крестик
-function handlePopupClose(evt) {
-  const popup = evt.target.closest('.popup');
-  if (popup && (evt.target === popup || evt.target.classList.contains('popup__close'))) {
-    closePopup(popup);
-  }
-}
-
-// Функция закрытия попапа по нажатию клавиши esc
-function handlePopupEscClose(evt) {
-  const openedPopup = document.querySelector('.popup_is-opened');
-  if (evt.key === 'Escape' && openedPopup) {
-    closePopup(openedPopup);
-  }
 }
 
 // Хендлер сабмита формы изменения профиля
@@ -101,16 +49,19 @@ function handleCardFormSubmit(evt) {
   closePopup(addCardPopup);
 }
 
+// Добавление дефолтных карт
+initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
+
+// Обработчики для изменения профиля
 profileEditButton.addEventListener('click', () => {
   openPopup(profileEditPopup);
   profileEditFormName.value = profileName.textContent;
   profileEditFormJob.value = profileDesc.textContent;
 });
-
 profileEditForm.addEventListener('submit', handleProfileFormSubmit);
 
+// Обработчики для добавления новой карточки
 addCardButton.addEventListener('click', () => {
   openPopup(addCardPopup);
-})
-
+});
 addCardForm.addEventListener('submit', handleCardFormSubmit);

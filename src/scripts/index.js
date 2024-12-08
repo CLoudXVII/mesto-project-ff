@@ -47,6 +47,8 @@ function handleCardFormSubmit(evt) {
   newCard.link = addCardFormLink.value;
   cardList.prepend(createCard(newCard, handleCardRemove, handleCardLike, handleImagePopup));
   closePopup(addCardPopup);
+  addCardFormName.value = "";
+  addCardFormLink.value = "";
 }
 
 // Добавление дефолтных карт

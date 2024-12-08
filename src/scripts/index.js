@@ -51,9 +51,6 @@ function handleCardFormSubmit(evt) {
   addCardFormLink.value = "";
 }
 
-// Добавление дефолтных карт
-initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
-
 // Обработчики для изменения профиля
 profileEditButton.addEventListener('click', () => {
   openPopup(profileEditPopup);
@@ -67,3 +64,6 @@ addCardButton.addEventListener('click', () => {
   openPopup(addCardPopup);
 });
 addCardForm.addEventListener('submit', handleCardFormSubmit);
+
+// Добавление дефолтных карт
+initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));

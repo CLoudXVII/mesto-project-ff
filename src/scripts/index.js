@@ -2,6 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
+import { clearValidation, enableValidation } from '../components/validation.js';
 
 const cardList = document.querySelector('.places__list');
 
@@ -56,14 +57,18 @@ profileEditButton.addEventListener('click', () => {
   openPopup(profileEditPopup);
   profileEditFormName.value = profileName.textContent;
   profileEditFormJob.value = profileDesc.textContent;
+  clearValidation(profileEditForm);
 });
 profileEditForm.addEventListener('submit', handleProfileFormSubmit);
 
 // Обработчики для добавления новой карточки
 addCardButton.addEventListener('click', () => {
   openPopup(addCardPopup);
+  clearValidation(addCardForm);
 });
 addCardForm.addEventListener('submit', handleCardFormSubmit);
 
 // Добавление дефолтных карт
 initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
+
+enableValidation();

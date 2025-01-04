@@ -10,4 +10,6 @@
 @import url('../blocks/popup/popup.css');
 @import url('../blocks/popup/_is-animated/popup_is-animated.css');
 @import url('../blocks/popup/_is-opened/popup_is-opened.css');
-
+@import url('../blocks/popup/__input-error/_is-visible/popup__input-error_is-visible.css');
+@import url('../blocks/popup/__input/_type_error/popup__input_type_error.css');
+@import url('../blocks/popup/__button/_is-inactive/popup__button_is-inactive.css');

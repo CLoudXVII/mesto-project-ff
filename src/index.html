@@ -37,8 +37,32 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile">
-        <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" required minlength="2" maxlength="40">
-        <input type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" required minlength="2" maxlength="200">
+        <input
+          type="text"
+          name="name"
+          class="popup__input popup__input_type_name"
+          id="profile-name-input"
+          placeholder="Имя"
+          required
+          minlength="2"
+          maxlength="40"
+          pattern="^[a-zA-Zа-яёА-ЯЁ\-\s]{1,}$"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+        >
+        <span class="popup__input-error profile-name-input-error">Вы пропустили это поле</span>
+        <input
+          type="text"
+          name="description"
+          class="popup__input popup__input_type_description"
+          id="profile-description-input"
+          placeholder="Занятие"
+          required
+          minlength="2"
+          maxlength="200"
+          pattern="^[a-zA-Zа-яёА-ЯЁ\-\s]{1,}$"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+        >
+        <span class="popup__input-error profile-description-input-error">Вы пропустили это поле</span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
     </div>
@@ -48,10 +72,28 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place">
-        <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required minlength="2" maxlength="30">
-        <span class="popup__input-error">Вы пропустили это поле</span>
-        <input type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
-        <span class="popup__input-error">Введите адрес сайта</span>
+        <input
+          type="text"
+          name="place-name"
+          class="popup__input popup__input_type_card-name"
+          id="place-name-input"
+          placeholder="Название"
+          required
+          minlength="2"
+          maxlength="30"
+          pattern="^[a-zA-Zа-яёА-ЯЁ\-\s]{1,}$"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+        >
+        <span class="popup__input-error place-name-input-error">Вы пропустили это поле</span>
+        <input
+          type="url"
+          name="link"
+          class="popup__input popup__input_type_url"
+          id="place-url-input"
+          placeholder="Ссылка на картинку"
+          required
+        >
+        <span class="popup__input-error place-url-input-error">Вы пропустили это поле</span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
     </div>

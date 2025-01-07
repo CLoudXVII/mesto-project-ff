@@ -3,7 +3,7 @@ import '../pages/index.css';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
-import { getUserData, getCardList, updatePage } from "../components/api.js";
+import { getUserData, getCardList, changeProfileInfo, updatePage } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
@@ -38,9 +38,16 @@ function handleImagePopup(evt) {
 // Хендлер сабмита формы изменения профиля
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = profileEditFormName.value;
-  profileDesc.textContent = profileEditFormJob.value;
-  closePopup(profileEditPopup);
+  changeProfileInfo(profileEditFormName.value, profileEditFormJob.value)
+    .then(data => {
+      profileName.textContent = data.name;
+      profileDesc.textContent = data.about;
+      closePopup(profileEditPopup);
+    })
+    .catch(err => {
+      console.log(`Ошибка: ${err}`);
+      alert("Ошибка при обновлении профиля. Попробуйте еще раз.");
+    });
 }
 
 // Хендлер сабмита формы новой карточки

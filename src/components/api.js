@@ -47,7 +47,23 @@ export function updatePage(nameElement, descElement, avatarElement, cardList, cr
 
     cardData.forEach(element => cardList.append(createCardFunc(element, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
   })
-  .catch(err => {
-    console.log(`Ошибка: ${err}`);
-  });
+  .catch(err => console.log(`Ошибка: ${err}`))
+}
+
+export async function changeProfileInfo(name, desc) {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      name: name,
+      about: desc
+    })
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject(`Ошибка: ${res.status}`);
+      }
+    })
 }

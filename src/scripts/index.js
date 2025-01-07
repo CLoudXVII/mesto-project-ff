@@ -1,9 +1,9 @@
 import '../pages/index.css';
-import { initialCards } from './cards.js';
+// import { initialCards } from './cards.js';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
-import { updateUserData } from "../components/api.js";
+import { getUserData, getCardList, updatePage } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
@@ -70,10 +70,8 @@ addCardButton.addEventListener('click', () => {
 });
 addCardForm.addEventListener('submit', handleCardFormSubmit);
 
-// Добавление дефолтных карт
-initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
-
 // Включение валидации для всех форм
 enableValidation();
 
-updateUserData(profileName, profileDesc, profileAvatar);
+// Обновление страницы и загрузка всех данных
+updatePage(profileName, profileDesc, profileAvatar, cardList, createCard, handleCardRemove, handleCardLike, handleImagePopup)

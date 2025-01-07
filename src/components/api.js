@@ -6,23 +6,48 @@ const config = {
   }
 }
 
-export function updateUserData(nameElement, descElement, avatarElement) {
-  fetch(`${config.baseUrl}/users/me`, {
+// GET: Получение данных профиля пользователя
+export async function getUserData() {
+  return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then((res) => {
+    .then(res => {
       if (res.ok) {
         return res.json();
       } else {
         return Promise.reject(`Ошибка: ${res.status}`);
       }
-    })
-    .then((data) => {
-      nameElement.textContent = data.name;
-      descElement.textContent = data.about;
-      avatarElement.style = `background-image: url(${data.avatar});`;
-    })
-    .catch(err => {
-      console.log(`Ошибка: ${err}`);
-    })
+    });
+}
+
+// GET: Получение данных массива карточек
+export async function getCardList() {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject(`Ошибка: ${res.status}`);
+      }
+    });
+}
+
+// Полное обновление страницы с параллельным выполнение обоих промисов на получение информации
+export function updatePage(nameElement, descElement, avatarElement, cardList, createCardFunc, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc) {
+  Promise.all([
+    getUserData(nameElement, descElement, avatarElement),
+    getCardList(cardList, createCardFunc, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)
+  ])
+  .then(([userData, cardData]) => {
+    nameElement.textContent = userData.name;
+    descElement.textContent = userData.about;
+    avatarElement.style = `background-image: url(${userData.avatar});`;
+
+    cardData.forEach(element => cardList.append(createCardFunc(element, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
+  })
+  .catch(err => {
+    console.log(`Ошибка: ${err}`);
+  });
 }

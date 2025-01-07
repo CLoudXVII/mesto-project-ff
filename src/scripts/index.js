@@ -3,7 +3,7 @@ import '../pages/index.css';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
-import { getUserData, getCardList, changeProfileInfo, updatePage } from "../components/api.js";
+import { addNewCard, changeProfileInfo, updatePage } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
@@ -53,12 +53,19 @@ function handleProfileFormSubmit(evt) {
 // Хендлер сабмита формы новой карточки
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
-  const newCard = {};
-  newCard.name = addCardFormName.value;
-  newCard.link = addCardFormLink.value;
-  cardList.prepend(createCard(newCard, handleCardRemove, handleCardLike, handleImagePopup));
-  closePopup(addCardPopup);
-  addCardForm.reset();
+  addNewCard(addCardFormName.value, addCardFormLink.value)
+    .then(data => {
+      const newCard = {};
+      newCard.name = data.name;
+      newCard.link = data.link;
+      cardList.prepend(createCard(newCard, handleCardRemove, handleCardLike, handleImagePopup));
+      closePopup(addCardPopup);
+      addCardForm.reset();
+    })
+    .catch(err => {
+      console.log(`Ошибка: ${err}`);
+      alert("Ошибка при добавлении карточки. Попробуйте еще раз.");
+    })
 }
 
 // Обработчики для изменения профиля

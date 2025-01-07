@@ -21,7 +21,7 @@ export async function getUserData() {
 }
 
 // GET: Получение данных массива карточек
-export async function getCardList() {
+async function getCardList() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
@@ -44,8 +44,7 @@ export function updatePage(nameElement, descElement, avatarElement, cardList, cr
     nameElement.textContent = userData.name;
     descElement.textContent = userData.about;
     avatarElement.style = `background-image: url(${userData.avatar});`;
-
-    cardData.forEach(element => cardList.append(createCardFunc(element, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
+    cardData.forEach(element => cardList.append(createCardFunc(element, userData._id, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
   })
   .catch(err => console.log(`Ошибка: ${err}`))
 }

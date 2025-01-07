@@ -3,7 +3,7 @@ import '../pages/index.css';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
-import { addNewCard, changeProfileInfo, updatePage } from "../components/api.js";
+import { addNewCard, changeProfileInfo, getUserData, updatePage } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
@@ -58,7 +58,10 @@ function handleCardFormSubmit(evt) {
       const newCard = {};
       newCard.name = data.name;
       newCard.link = data.link;
-      cardList.prepend(createCard(newCard, handleCardRemove, handleCardLike, handleImagePopup));
+      getUserData()
+        .then(userData => {
+          cardList.prepend(createCard(newCard, userData._id, handleCardRemove, handleCardLike, handleImagePopup));
+        })
       closePopup(addCardPopup);
       addCardForm.reset();
     })

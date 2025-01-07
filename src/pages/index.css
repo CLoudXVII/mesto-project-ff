@@ -13,3 +13,4 @@
 @import url('../blocks/popup/__input-error/_is-visible/popup__input-error_is-visible.css');
 @import url('../blocks/popup/__input/_type_error/popup__input_type_error.css');
 @import url('../blocks/popup/__button/_is-inactive/popup__button_is-inactive.css');
+@import url('../blocks/card/__delete-button/_is-disabled/card__delete-button_is-disabled.css');

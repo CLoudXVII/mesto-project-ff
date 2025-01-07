@@ -3,11 +3,13 @@ import { initialCards } from './cards.js';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
+import { updateUserData } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
 const profileName = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
+const profileAvatar = document.querySelector('.profile__image');
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -71,4 +73,7 @@ addCardForm.addEventListener('submit', handleCardFormSubmit);
 // Добавление дефолтных карт
 initialCards.forEach(element => cardList.append(createCard(element, handleCardRemove, handleCardLike, handleImagePopup)));
 
+// Включение валидации для всех форм
 enableValidation();
+
+updateUserData(profileName, profileDesc, profileAvatar);

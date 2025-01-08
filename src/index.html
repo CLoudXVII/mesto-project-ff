@@ -14,7 +14,9 @@
   </header>
   <main class="content">
     <section class="profile page__section">
-      <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>);"></div>
+      <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>);">
+        <div class="profile__image-overlay"></div>
+      </div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
         <button class="profile__edit-button" type="button"></button>
@@ -94,6 +96,24 @@
           required
         >
         <span class="popup__input-error place-url-input-error">Вы пропустили это поле</span>
+        <button type="submit" class="button popup__button">Сохранить</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_is-animated popup_type_avatar-change">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form class="popup__form" name="avatar-change">
+        <input
+          type="url"
+          name="link"
+          class="popup__input popup__input_type_url"
+          id="avatar-change-input"
+          placeholder="Ссылка на картинку"
+          required
+        >
+        <span class="popup__input-error avatar-change-input-error">Вы пропустили это поле</span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
     </div>

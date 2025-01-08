@@ -119,3 +119,13 @@ export async function changeLikeState(cardId, flag) {
       })
   }
 }
+
+export function changeAvatar(link) {
+  fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: link
+    })
+  })
+}

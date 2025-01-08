@@ -3,13 +3,14 @@ import '../pages/index.css';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
-import { addNewCard, changeProfileInfo, getUserData, updatePage } from "../components/api.js";
+import { addNewCard, changeProfileInfo, getUserData, changeAvatar, updatePage } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
 const profileName = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
 const profileAvatar = document.querySelector('.profile__image');
+const profileAvatarOverlay = document.querySelector('.profile__image-overlay');
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -26,6 +27,10 @@ const addCardFormLink = addCardForm.querySelector('.popup__input_type_url');
 const imagePopup = document.querySelector('.popup_type_image');
 const imagePopupName = imagePopup.querySelector('.popup__caption');
 const imagePopupWindow = imagePopup.querySelector('.popup__image');
+
+const avatarChangePopup = document.querySelector('.popup_type_avatar-change');
+const avatarChangeForm = avatarChangePopup.querySelector('.popup__form');
+const avatarChangeFormLink = avatarChangeForm.querySelector('.popup__input_type_url');
 
 // Хендлер увеличения изображения
 function handleImagePopup(evt) {
@@ -68,6 +73,14 @@ function handleCardFormSubmit(evt) {
     })
 }
 
+// Хендлер сабмита нового аватара
+function handleChangeAvatarSubmit(evt) {
+  evt.preventDefault();
+  changeAvatar(avatarChangeFormLink.value);
+  profileAvatar.style = `background-image: url(${avatarChangeFormLink.value});`;
+  closePopup(avatarChangePopup);
+}
+
 // Обработчики для изменения профиля
 profileEditButton.addEventListener('click', () => {
   openPopup(profileEditPopup);
@@ -83,6 +96,13 @@ addCardButton.addEventListener('click', () => {
   clearValidation(addCardForm);
 });
 addCardForm.addEventListener('submit', handleCardFormSubmit);
+
+// Обработчики для изменения аватара
+profileAvatarOverlay.addEventListener('click', () => {
+  openPopup(avatarChangePopup);
+  clearValidation(avatarChangeForm);
+})
+avatarChangeForm.addEventListener('submit', handleChangeAvatarSubmit)
 
 // Включение валидации для всех форм
 enableValidation();

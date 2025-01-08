@@ -1,0 +1,19 @@
+.profile__image-overlay {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  opacity: 0;
+  background: url('../../../images/profile-edit-icon.svg') center no-repeat;
+  background-color: rgba(0, 0, 0, 0);
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.profile__image-overlay:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.8);
+}

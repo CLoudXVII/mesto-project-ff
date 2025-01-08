@@ -55,12 +55,9 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   addNewCard(addCardFormName.value, addCardFormLink.value)
     .then(data => {
-      const newCard = {};
-      newCard.name = data.name;
-      newCard.link = data.link;
       getUserData()
         .then(userData => {
-          cardList.prepend(createCard(newCard, userData._id, handleCardRemove, handleCardLike, handleImagePopup));
+          cardList.prepend(createCard(data, userData._id, handleCardRemove, handleCardLike, handleImagePopup));
         })
       closePopup(addCardPopup);
       addCardForm.reset();

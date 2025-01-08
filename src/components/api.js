@@ -84,3 +84,10 @@ export async function addNewCard(name, link) {
       }
     })
 }
+
+export function deleteCard(cardId) {
+  fetch(`${config.baseUrl}/cards/${cardId}`,{
+    method: 'DELETE',
+    headers: config.headers
+  })
+}

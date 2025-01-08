@@ -1,6 +1,10 @@
+import { deleteCard } from './api.js'
+
 // Функция удаление карточки
 export function handleCardRemove(evt) {
-  evt.target.closest('.card').remove();
+  const cardElement = evt.target.closest('.card');
+  cardElement.remove();
+  deleteCard(cardElement.id);
 }
 
 // Функция лайка карточки
@@ -16,6 +20,7 @@ export function createCard(card, userId, removeCardFunction, likeCardFunction, i
   const cardDeleteButton = cardElement.querySelector('.card__delete-button');
   cardImage.src = card.link;
   cardImage.alt = card.name;
+  cardElement.id = card._id;
   cardElement.querySelector('.card__title').textContent = card.name;
   if (card.owner._id === userId) {
     cardDeleteButton.addEventListener('click', removeCardFunction);

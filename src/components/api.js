@@ -44,7 +44,7 @@ export function updatePage(nameElement, descElement, avatarElement, cardList, cr
     nameElement.textContent = userData.name;
     descElement.textContent = userData.about;
     avatarElement.style = `background-image: url(${userData.avatar});`;
-    cardData.forEach(element => cardList.append(createCardFunc(element, userData._id, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
+    cardData.forEach(element => cardList.append(createCardFunc(element, userData, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
   })
   .catch(err => console.log(`Ошибка: ${err}`))
 }
@@ -90,4 +90,32 @@ export function deleteCard(cardId) {
     method: 'DELETE',
     headers: config.headers
   })
+}
+
+export async function changeLikeState(cardId, flag) {
+  if (flag) {
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+      method: 'PUT',
+      headers: config.headers
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+      })
+  } else {
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+      method: 'DELETE',
+      headers: config.headers
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+      })
+  }
 }

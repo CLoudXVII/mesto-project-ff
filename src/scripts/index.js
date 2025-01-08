@@ -57,7 +57,7 @@ function handleCardFormSubmit(evt) {
     .then(data => {
       getUserData()
         .then(userData => {
-          cardList.prepend(createCard(data, userData._id, handleCardRemove, handleCardLike, handleImagePopup));
+          cardList.prepend(createCard(data, userData, handleCardRemove, handleCardLike, handleImagePopup));
         })
       closePopup(addCardPopup);
       addCardForm.reset();

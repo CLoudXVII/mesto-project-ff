@@ -120,12 +120,19 @@ export async function changeLikeState(cardId, flag) {
   }
 }
 
-export function changeAvatar(link) {
-  fetch(`${config.baseUrl}/users/me/avatar`, {
+export async function changeAvatar(link) {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       avatar: link
     })
   })
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      } else {
+        return Promise.reject(`Ошибка: ${res.status}`);
+      }
+    })
 }

@@ -44,7 +44,6 @@ export function createCard(card, user, removeCardFunction, likeCardFunction, ima
     cardDeleteButton.disabled = true;
     cardDeleteButton.classList.add('card__delete-button_is-disabled');
   }
-  console.log(card.likes);
   card.likes.forEach(element => {
     if (element._id === user._id) {
       cardLikeButton.classList.add('card__like-button_is-active');

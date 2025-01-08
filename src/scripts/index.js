@@ -43,6 +43,9 @@ function handleImagePopup(evt) {
 // Хендлер сабмита формы изменения профиля
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
+  const submitButton = profileEditForm.querySelector('button');
+  const originalButtonText = submitButton.textContent;
+  submitButton.textContent = 'Сохранение...';
   changeProfileInfo(profileEditFormName.value, profileEditFormJob.value)
     .then(data => {
       profileName.textContent = data.name;
@@ -52,12 +55,18 @@ function handleProfileFormSubmit(evt) {
     .catch(err => {
       console.log(`Ошибка: ${err}`);
       alert("Ошибка при обновлении профиля. Попробуйте еще раз.");
-    });
+    })
+    .finally(() => {
+      submitButton.textContent = originalButtonText;
+    })
 }
 
 // Хендлер сабмита формы новой карточки
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
+  const submitButton = addCardForm.querySelector('button');
+  const originalButtonText = submitButton.textContent;
+  submitButton.textContent = 'Создание...';
   addNewCard(addCardFormName.value, addCardFormLink.value)
     .then(data => {
       getUserData()
@@ -71,14 +80,30 @@ function handleCardFormSubmit(evt) {
       console.log(`Ошибка: ${err}`);
       alert("Ошибка при добавлении карточки. Попробуйте еще раз.");
     })
+    .finally(() => {
+      submitButton.textContent = originalButtonText;
+    })
 }
 
 // Хендлер сабмита нового аватара
 function handleChangeAvatarSubmit(evt) {
   evt.preventDefault();
-  changeAvatar(avatarChangeFormLink.value);
-  profileAvatar.style = `background-image: url(${avatarChangeFormLink.value});`;
-  closePopup(avatarChangePopup);
+  const submitButton = avatarChangeForm.querySelector('button');
+  const originalButtonText = submitButton.textContent;
+  submitButton.textContent = 'Сохранение...';
+  changeAvatar(avatarChangeFormLink.value)
+    .then(data => {
+      profileAvatar.style = `background-image: url(${data.avatar});`;
+      closePopup(avatarChangePopup);
+      avatarChangeForm.reset();
+    })
+    .catch(err => {
+      console.log(`Ошибка: ${err}`);
+      alert("Ошибка при изменении аватара. Попробуйте еще раз.");
+    })
+    .finally(() => {
+      submitButton.textContent = originalButtonText;
+    })
 }
 
 // Обработчики для изменения профиля

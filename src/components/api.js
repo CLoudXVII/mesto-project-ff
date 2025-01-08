@@ -21,7 +21,7 @@ export async function getUserData() {
 }
 
 // GET: Получение данных массива карточек
-async function getCardList() {
+export async function getCardList() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
@@ -34,21 +34,7 @@ async function getCardList() {
     });
 }
 
-// Полное обновление страницы с параллельным выполнение обоих промисов на получение информации
-export function updatePage(nameElement, descElement, avatarElement, cardList, createCardFunc, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc) {
-  Promise.all([
-    getUserData(nameElement, descElement, avatarElement),
-    getCardList(cardList, createCardFunc, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)
-  ])
-  .then(([userData, cardData]) => {
-    nameElement.textContent = userData.name;
-    descElement.textContent = userData.about;
-    avatarElement.style = `background-image: url(${userData.avatar});`;
-    cardData.forEach(element => cardList.append(createCardFunc(element, userData, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
-  })
-  .catch(err => console.log(`Ошибка: ${err}`))
-}
-
+// PATCH: Изменения информации в профиле
 export async function changeProfileInfo(name, desc) {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
@@ -67,6 +53,7 @@ export async function changeProfileInfo(name, desc) {
     })
 }
 
+// POST: Добавление новой карточки
 export async function addNewCard(name, link) {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
@@ -85,13 +72,20 @@ export async function addNewCard(name, link) {
     })
 }
 
+// DELETE: Удаление карточки
 export function deleteCard(cardId) {
   fetch(`${config.baseUrl}/cards/${cardId}`,{
     method: 'DELETE',
     headers: config.headers
   })
+    .then(res => {
+      if(!res.ok) {
+        return Promise.reject(`Ошибка: ${res.status}`);
+      }
+    })
 }
 
+// PUT/DELETE: Установка значения лайка
 export async function changeLikeState(cardId, flag) {
   if (flag) {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
@@ -120,6 +114,7 @@ export async function changeLikeState(cardId, flag) {
   }
 }
 
+// PATCH: Изменения аватара в профиле
 export async function changeAvatar(link) {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',

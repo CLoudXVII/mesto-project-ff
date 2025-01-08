@@ -3,7 +3,7 @@ import '../pages/index.css';
 import { handleCardRemove, handleCardLike, createCard } from '../components/card.js';
 import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
-import { addNewCard, changeProfileInfo, getUserData, changeAvatar, updatePage } from "../components/api.js";
+import { addNewCard, changeProfileInfo, getUserData, getCardList, changeAvatar } from "../components/api.js";
 
 const cardList = document.querySelector('.places__list');
 
@@ -104,6 +104,21 @@ function handleChangeAvatarSubmit(evt) {
     .finally(() => {
       submitButton.textContent = originalButtonText;
     })
+}
+
+// Функция полного обновления страницы
+function updatePage(nameElement, descElement, avatarElement, cardList, createCardFunc, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc) {
+  Promise.all([
+    getUserData(nameElement, descElement, avatarElement),
+    getCardList(cardList, createCardFunc, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)
+  ])
+  .then(([userData, cardData]) => {
+    nameElement.textContent = userData.name;
+    descElement.textContent = userData.about;
+    avatarElement.style = `background-image: url(${userData.avatar});`;
+    cardData.forEach(element => cardList.append(createCardFunc(element, userData, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
+  })
+  .catch(err => console.log(`Ошибка: ${err}`))
 }
 
 // Обработчики для изменения профиля

@@ -5,6 +5,20 @@ import { openPopup, closePopup } from '../components/modal.js';
 import { clearValidation, enableValidation } from '../components/validation.js';
 import { addNewCard, changeProfileInfo, getUserData, getCardList, changeAvatar } from "../components/api.js";
 
+const validationConfig = {
+  formClass: 'popup__form',
+
+  submitButtonClass: 'popup__button',
+  submitButtonDisabledClass: 'popup__button_is-inactive',
+
+  inputClass: 'popup__input',
+  inputErrorClass: 'popup__input_type_error',
+
+  errorMesageVisibilityClass: 'popup__input-error_is-visible',
+}
+
+let userId;
+
 const cardList = document.querySelector('.places__list');
 
 const profileName = document.querySelector('.profile__title');
@@ -17,12 +31,14 @@ const profileEditPopup = document.querySelector('.popup_type_edit');
 const profileEditForm = profileEditPopup.querySelector('.popup__form');
 const profileEditFormName = profileEditForm.querySelector('.popup__input_type_name');
 const profileEditFormJob = profileEditForm.querySelector('.popup__input_type_description');
+const profileEditFormButton = profileEditForm.querySelector('button');
 
 const addCardButton = document.querySelector('.profile__add-button');
 const addCardPopup = document.querySelector('.popup_type_new-card');
 const addCardForm = addCardPopup.querySelector('.popup__form');
 const addCardFormName = addCardForm.querySelector('.popup__input_type_card-name');;
 const addCardFormLink = addCardForm.querySelector('.popup__input_type_url');
+const addCardFormButton = addCardForm.querySelector('button');
 
 const imagePopup = document.querySelector('.popup_type_image');
 const imagePopupName = imagePopup.querySelector('.popup__caption');
@@ -31,6 +47,7 @@ const imagePopupWindow = imagePopup.querySelector('.popup__image');
 const avatarChangePopup = document.querySelector('.popup_type_avatar-change');
 const avatarChangeForm = avatarChangePopup.querySelector('.popup__form');
 const avatarChangeFormLink = avatarChangeForm.querySelector('.popup__input_type_url');
+const avatarChangeFormButton = avatarChangeForm.querySelector('button');
 
 // Хендлер увеличения изображения
 function handleImagePopup(evt) {
@@ -43,9 +60,8 @@ function handleImagePopup(evt) {
 // Хендлер сабмита формы изменения профиля
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  const submitButton = profileEditForm.querySelector('button');
-  const originalButtonText = submitButton.textContent;
-  submitButton.textContent = 'Сохранение...';
+  const originalButtonText = profileEditFormButton.textContent;
+  profileEditFormButton.textContent = 'Сохранение...';
   changeProfileInfo(profileEditFormName.value, profileEditFormJob.value)
     .then(data => {
       profileName.textContent = data.name;
@@ -57,22 +73,18 @@ function handleProfileFormSubmit(evt) {
       alert("Ошибка при обновлении профиля. Попробуйте еще раз.");
     })
     .finally(() => {
-      submitButton.textContent = originalButtonText;
+      profileEditFormButton.textContent = originalButtonText;
     })
 }
 
 // Хендлер сабмита формы новой карточки
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
-  const submitButton = addCardForm.querySelector('button');
-  const originalButtonText = submitButton.textContent;
-  submitButton.textContent = 'Создание...';
+  const originalButtonText = addCardFormButton.textContent;
+  addCardFormButton.textContent = 'Создание...';
   addNewCard(addCardFormName.value, addCardFormLink.value)
     .then(data => {
-      getUserData()
-        .then(userData => {
-          cardList.prepend(createCard(data, userData, handleCardRemove, handleCardLike, handleImagePopup));
-        })
+      cardList.prepend(createCard(data, userId, handleCardRemove, handleCardLike, handleImagePopup));
       closePopup(addCardPopup);
       addCardForm.reset();
     })
@@ -81,16 +93,15 @@ function handleCardFormSubmit(evt) {
       alert("Ошибка при добавлении карточки. Попробуйте еще раз.");
     })
     .finally(() => {
-      submitButton.textContent = originalButtonText;
+      addCardFormButton.textContent = originalButtonText;
     })
 }
 
 // Хендлер сабмита нового аватара
 function handleChangeAvatarSubmit(evt) {
   evt.preventDefault();
-  const submitButton = avatarChangeForm.querySelector('button');
-  const originalButtonText = submitButton.textContent;
-  submitButton.textContent = 'Сохранение...';
+  const originalButtonText = avatarChangeFormButton.textContent;
+  avatarChangeFormButton.textContent = 'Сохранение...';
   changeAvatar(avatarChangeFormLink.value)
     .then(data => {
       profileAvatar.style = `background-image: url(${data.avatar});`;
@@ -102,7 +113,7 @@ function handleChangeAvatarSubmit(evt) {
       alert("Ошибка при изменении аватара. Попробуйте еще раз.");
     })
     .finally(() => {
-      submitButton.textContent = originalButtonText;
+      avatarChangeFormButton.textContent = originalButtonText;
     })
 }
 
@@ -115,8 +126,9 @@ function updatePage(nameElement, descElement, avatarElement, cardList, createCar
   .then(([userData, cardData]) => {
     nameElement.textContent = userData.name;
     descElement.textContent = userData.about;
+    userId = userData._id;
     avatarElement.style = `background-image: url(${userData.avatar});`;
-    cardData.forEach(element => cardList.append(createCardFunc(element, userData, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
+    cardData.forEach(element => cardList.append(createCardFunc(element, userData._id, handleCardRemoveFunc, handleCardLikeFunc, handleImagePopupFunc)));
   })
   .catch(err => console.log(`Ошибка: ${err}`))
 }
@@ -126,26 +138,26 @@ profileEditButton.addEventListener('click', () => {
   openPopup(profileEditPopup);
   profileEditFormName.value = profileName.textContent;
   profileEditFormJob.value = profileDesc.textContent;
-  clearValidation(profileEditForm);
+  clearValidation(profileEditForm, validationConfig);
 });
 profileEditForm.addEventListener('submit', handleProfileFormSubmit);
 
 // Обработчики для добавления новой карточки
 addCardButton.addEventListener('click', () => {
   openPopup(addCardPopup);
-  clearValidation(addCardForm);
+  clearValidation(addCardForm, validationConfig);
 });
 addCardForm.addEventListener('submit', handleCardFormSubmit);
 
 // Обработчики для изменения аватара
 profileAvatarOverlay.addEventListener('click', () => {
   openPopup(avatarChangePopup);
-  clearValidation(avatarChangeForm);
+  clearValidation(avatarChangeForm, validationConfig);
 })
 avatarChangeForm.addEventListener('submit', handleChangeAvatarSubmit)
 
 // Включение валидации для всех форм
-enableValidation();
+enableValidation(validationConfig);
 
 // Обновление страницы и загрузка всех данных
 updatePage(profileName, profileDesc, profileAvatar, cardList, createCard, handleCardRemove, handleCardLike, handleImagePopup)

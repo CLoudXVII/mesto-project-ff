@@ -6,18 +6,19 @@ const config = {
   }
 }
 
+function checkResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка ${res.status}`);
+}
+
 // GET: Получение данных профиля пользователя
 export async function getUserData() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-      }
-    });
+    .then(checkResponse);
 }
 
 // GET: Получение данных массива карточек
@@ -25,13 +26,7 @@ export async function getCardList() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-      }
-    });
+    .then(checkResponse);
 }
 
 // PATCH: Изменения информации в профиле
@@ -44,13 +39,7 @@ export async function changeProfileInfo(name, desc) {
       about: desc
     })
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-      }
-    })
+    .then(checkResponse)
 }
 
 // POST: Добавление новой карточки
@@ -63,26 +52,16 @@ export async function addNewCard(name, link) {
       link: link
     })
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-      }
-    })
+    .then(checkResponse)
 }
 
 // DELETE: Удаление карточки
-export function deleteCard(cardId) {
-  fetch(`${config.baseUrl}/cards/${cardId}`,{
+export async function deleteCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/${cardId}`,{
     method: 'DELETE',
     headers: config.headers
   })
-    .then(res => {
-      if(!res.ok) {
-        return Promise.reject(`Ошибка: ${res.status}`);
-      }
-    })
+    .then(checkResponse)
 }
 
 // PUT/DELETE: Установка значения лайка
@@ -92,25 +71,13 @@ export async function changeLikeState(cardId, flag) {
       method: 'PUT',
       headers: config.headers
     })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        }
-      })
+      .then(checkResponse)
   } else {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
       method: 'DELETE',
       headers: config.headers
     })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        }
-      })
+      .then(checkResponse)
   }
 }
 
@@ -123,11 +90,5 @@ export async function changeAvatar(link) {
       avatar: link
     })
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json()
-      } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-      }
-    })
+    .then(checkResponse)
 }
